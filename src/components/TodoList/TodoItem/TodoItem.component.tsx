@@ -1,7 +1,7 @@
 import React from 'react';
-import { IconButton, Typography, Box, Paper } from '@mui/material';
+import { IconButton, Typography, Box, Paper, Stack } from '@mui/material';
 
-import { Delete as DeleteIcon } from '@mui/icons-material';
+import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 
 import type { Todo } from '../../../App';
 
@@ -9,9 +9,10 @@ interface TodoItemProps {
   todo: Todo;
   onDeleteTodo: (id: Todo['id']) => void;
   onCheckTodo: (id: Todo['id']) => void;
+  onEdit: (id: Todo['id']) => void;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todo, onDeleteTodo, onCheckTodo }) => (
+export const TodoItem: React.FC<TodoItemProps> = ({ todo, onDeleteTodo, onCheckTodo, onEdit }) => (
   <Paper
     elevation={3}
     sx={{
@@ -40,10 +41,13 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onDeleteTodo, onCheckT
         {todo.description}
       </Typography>
     </Box>
-    <Box>
+    <Stack spacing={2} direction='row'>
+      <IconButton onClick={() => onEdit(todo.id)} color='primary' aria-label='delete'>
+        <EditIcon />
+      </IconButton>
       <IconButton onClick={() => onDeleteTodo(todo.id)} color='error' aria-label='delete'>
         <DeleteIcon />
       </IconButton>
-    </Box>
+    </Stack>
   </Paper>
 );
