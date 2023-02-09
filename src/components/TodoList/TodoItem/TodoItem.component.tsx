@@ -1,6 +1,7 @@
 import React from 'react';
+import { IconButton, Typography, Box, Paper } from '@mui/material';
 
-import { Paper } from '@mui/material';
+import { Delete as DeleteIcon } from '@mui/icons-material';
 
 type Todo = {
   id: number;
@@ -18,7 +19,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => (
     elevation={3}
     sx={{
       width: '100%',
-      padding: '25px 30px',
+      marginTop: '15px',
+      padding: '20px 28px',
       borderRadius: 2,
       display: 'flex',
       justifyContent: 'space-between',
@@ -26,6 +28,23 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo }) => (
       gap: 2
     }}
   >
-    {todo.name}
+    <Box textAlign='left'>
+      <Typography
+        variant='h5'
+        component='h5'
+        gutterBottom
+        sx={{ cursor: 'pointer', textDecorationLine: todo.checked ? 'line-through' : 'none' }}
+      >
+        {todo.name}
+      </Typography>
+      <Typography variant='subtitle1' component='div' gutterBottom>
+        {todo.description}
+      </Typography>
+    </Box>
+    <Box>
+      <IconButton color='error' aria-label='delete'>
+        <DeleteIcon />
+      </IconButton>
+    </Box>
   </Paper>
 );
