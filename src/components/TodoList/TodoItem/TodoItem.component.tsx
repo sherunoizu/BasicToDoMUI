@@ -3,16 +3,19 @@ import { IconButton, Typography, Box, Paper, Stack } from '@mui/material';
 
 import { Delete as DeleteIcon, Edit as EditIcon } from '@mui/icons-material';
 
-import type { Todo } from '../../../App';
-
 interface TodoItemProps {
   todo: Todo;
-  onDeleteTodo: (id: Todo['id']) => void;
-  onCheckTodo: (id: Todo['id']) => void;
-  onEdit: (id: Todo['id']) => void;
+  deleteTodo: (id: Todo['id']) => void;
+  checkTodo: (id: Todo['id']) => void;
+  selectTodoIdForEdit: (id: Todo['id']) => void;
 }
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todo, onDeleteTodo, onCheckTodo, onEdit }) => (
+export const TodoItem: React.FC<TodoItemProps> = ({
+  todo,
+  deleteTodo,
+  checkTodo,
+  selectTodoIdForEdit
+}) => (
   <Paper
     elevation={3}
     sx={{
@@ -33,7 +36,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onDeleteTodo, onCheckT
         component='h5'
         gutterBottom
         sx={{ cursor: 'pointer', textDecorationLine: todo.checked ? 'line-through' : 'none' }}
-        onClick={() => onCheckTodo(todo.id)}
+        onClick={() => checkTodo(todo.id)}
       >
         {todo.name}
       </Typography>
@@ -42,10 +45,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onDeleteTodo, onCheckT
       </Typography>
     </Box>
     <Stack spacing={2} direction='row'>
-      <IconButton onClick={() => onEdit(todo.id)} color='primary' aria-label='delete'>
+      <IconButton onClick={() => selectTodoIdForEdit(todo.id)} color='primary' aria-label='delete'>
         <EditIcon />
       </IconButton>
-      <IconButton onClick={() => onDeleteTodo(todo.id)} color='error' aria-label='delete'>
+      <IconButton onClick={() => deleteTodo(todo.id)} color='error' aria-label='delete'>
         <DeleteIcon />
       </IconButton>
     </Stack>
