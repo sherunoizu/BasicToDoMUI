@@ -1,24 +1,37 @@
 import React from 'react';
-import { Add as AddIcon } from '@mui/icons-material';
+import { Add as AddIcon, Edit as EditIcon } from '@mui/icons-material';
+
 import { TextField, Paper, Button } from '@mui/material';
 
-import type { Todo } from '../../App';
+import { useTodo } from '../../context';
 
 const DEFAULT_TODO = { name: '', description: '' };
 
-interface PanelProps {
-  onAddTodo: ({ name, description }: Omit<Todo, 'id' | 'checked'>) => void;
+interface AddTodoPanelProps {
+  mode: 'add';
 }
 
-export const Panel: React.FC<PanelProps> = ({ onAddTodo }) => {
+interface EditTodoPanelProps {
+  mode: 'edit';
+  editTodo: Omit<Todo, 'id' | 'checked'>;
+}
+
+type TodoPanelProps = AddTodoPanelProps | EditTodoPanelProps;
+
+export const Panel: React.FC<TodoPanelProps> = (props) => {
+  const isEdit = props.mode === 'edit';
+  const { changeTodo, addTodo } = useTodo();
   const [todo, setTodo] = React.useState({ name: '', description: '' });
 
-  const onButtonClickHandler = () => {
-    onAddTodo(todo);
+  const onClick = () => {
+    if (isEdit) {
+      return changeTodo(todo);
+    }
+    addTodo(todo);
     setTodo(DEFAULT_TODO);
   };
 
-  const onChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
     setTodo({ ...todo, [name]: value });
   };
@@ -27,6 +40,7 @@ export const Panel: React.FC<PanelProps> = ({ onAddTodo }) => {
     <Paper
       elevation={3}
       sx={{
+        marginTop: '15px',
         width: '100%',
         padding: '25px 30px',
         borderRadius: 2,
@@ -36,16 +50,16 @@ export const Panel: React.FC<PanelProps> = ({ onAddTodo }) => {
         gap: 2
       }}
     >
-      <TextField value={todo.name} onChange={onChangeHandler} name='name' label='name' />
+      <TextField value={todo.name} onChange={onChange} name='name' label='name' />
       <TextField
         value={todo.description}
-        onChange={onChangeHandler}
+        onChange={onChange}
         name='description'
         label='description'
       />
 
-      <Button startIcon={<AddIcon />} variant='outlined' onClick={onButtonClickHandler}>
-        Add
+      <Button startIcon={isEdit ? <EditIcon /> : <AddIcon />} variant='outlined' onClick={onClick}>
+        {isEdit ? 'Edit' : 'Add'}
       </Button>
     </Paper>
   );
