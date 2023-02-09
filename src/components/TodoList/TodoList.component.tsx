@@ -1,33 +1,40 @@
 import React from 'react';
 import { Box } from '@mui/material';
 
+import type { Todo } from '../../App';
 import { TodoItem } from './TodoItem/TodoItem.component';
+import { EditTodoItem } from './EditTodoItem/EditTodoItem.component';
 
-const todoList = [
-  {
-    id: 1,
-    name: 'task 1',
-    description: 'test',
-    checked: false
-  },
-  {
-    id: 2,
-    name: 'task 2',
-    description: 'test',
-    checked: false
-  },
-  {
-    id: 3,
-    name: 'task 3',
-    description: 'qwerqwrqwrqwr qwer qwer qwer qwer qwerqwer',
-    checked: true
-  }
-];
+interface TodoListProps {
+  todoList: Todo[];
+  onDeleteTodo: (id: Todo['id']) => void;
+  onCheckTodo: (id: Todo['id']) => void;
+  onEdit: (id: Todo['id']) => void;
+  editTodoId: Todo['id'] | null;
+  onChangeTodo: ({ name, description }: Omit<Todo, 'id' | 'checked'>) => void;
+}
 
-export const TodoList = () => (
+export const TodoList: React.FC<TodoListProps> = ({
+  todoList,
+  onDeleteTodo,
+  onCheckTodo,
+  onEdit,
+  editTodoId,
+  onChangeTodo
+}) => (
   <Box>
-    {todoList.map((todo) => (
-      <TodoItem todo={todo} />
-    ))}
+    {todoList.map((todo) => {
+      if (todo.id === editTodoId)
+        return <EditTodoItem key={todo.id} todo={todo} onChangeTodo={onChangeTodo} />;
+      return (
+        <TodoItem
+          key={todo.id}
+          todo={todo}
+          onDeleteTodo={onDeleteTodo}
+          onCheckTodo={onCheckTodo}
+          onEdit={onEdit}
+        />
+      );
+    })}
   </Box>
 );
