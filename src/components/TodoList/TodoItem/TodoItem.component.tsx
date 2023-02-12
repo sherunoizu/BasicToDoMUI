@@ -44,7 +44,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         {todo.description}
       </Typography>
     </Box>
-    <Stack spacing={2} direction='row'>
+    <Stack spacing={2} direction='column'>
       <IconButton onClick={() => selectTodoIdForEdit(todo.id)} color='primary' aria-label='delete'>
         <EditIcon />
       </IconButton>
